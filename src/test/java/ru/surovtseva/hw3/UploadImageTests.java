@@ -24,7 +24,7 @@ public class UploadImageTests extends BaseTest {
     String encodeOversizeImage;
     String imageDeleteHash;
 
-    @Step("Загрузка изображения перед тестом")
+    @Step("Подготовк изображений перед тестом")
     @BeforeEach
     void setUp() {
         byte[] fileContent = getFileContentInBase64(getSendingFile(FILE_NAME));
