@@ -25,6 +25,7 @@ public abstract class BaseTest {
     protected static String FILE_PATH;
     protected static String MIN_FILE_PATH;
     protected static String MAX_FILE_PATH;
+    protected static String MAX_FILE_URL;
     protected static String BIG_FILE_URL;
     protected static String BIG_FILE_PATH;
     protected static String WRONG_FILE_PATH;
@@ -59,6 +60,7 @@ public abstract class BaseTest {
         FILE_PATH = properties.getProperty("file.path");
         MIN_FILE_PATH = properties.getProperty("min.file.path");
         MAX_FILE_PATH = properties.getProperty("max.file.path");
+        MAX_FILE_URL = properties.getProperty("max.file.url");
         BIG_FILE_URL = properties.getProperty("big.file.url");
         BIG_FILE_PATH = properties.getProperty("big.file.path");
         WRONG_FILE_PATH = properties.getProperty("wrong.file.path");

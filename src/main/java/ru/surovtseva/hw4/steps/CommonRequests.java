@@ -1,5 +1,6 @@
 package ru.surovtseva.hw4.steps;
 
+import io.qameta.allure.Step;
 import io.restassured.builder.MultiPartSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import lombok.experimental.UtilityClass;
@@ -12,6 +13,7 @@ import static io.restassured.RestAssured.given;
 @UtilityClass
 public class CommonRequests {
 
+    @Step("Загрузка изображения")
     public static PostImageResponse uploadCommonImage(RequestSpecification spec, String fileName) {
         RequestSpecification multiPart = spec
                 .multiPart(
@@ -29,6 +31,7 @@ public class CommonRequests {
                 .as(PostImageResponse.class);
     }
 
+    @Step("Получение account ID")
     public static GetAccountResponse getAccountData (RequestSpecification spec, String username) {
         return given()
                 .spec(spec)
