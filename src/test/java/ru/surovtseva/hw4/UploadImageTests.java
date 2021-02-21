@@ -3,6 +3,7 @@ package ru.surovtseva.hw4;
 import com.github.javafaker.Faker;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
+import io.restassured.specification.MultiPartSpecification;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,17 +13,22 @@ import ru.surovtseva.hw4.common.BaseTest;
 import ru.surovtseva.hw4.dto.negative.ErrorMessageResponse;
 import ru.surovtseva.hw4.dto.negative.PostImageNegativeResponse;
 import ru.surovtseva.hw4.dto.positive.PostImageResponse;
+import ru.surovtseva.hw4.utils.CreateSpecUtils;
+
+import java.io.File;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static ru.surovtseva.hw4.steps.CommonRequests.getAccountData;
-import static ru.surovtseva.hw4.utils.CreateSpecUtils.*;
+import static ru.surovtseva.hw4.utils.CreateSpecUtils.createUploadImageSpec;
 
 
 @Feature("Загрузка изображения")
 public class UploadImageTests extends BaseTest {
 
+    MultiPartSpecification multiPartSpec;
+    MultiPartSpecification multiPartOverSizeSpec;
     String imageDeleteHash;
     int accountID;
     RequestSpecification requestBase64AuthSpec;
@@ -47,24 +53,15 @@ public class UploadImageTests extends BaseTest {
         imageTitle = faker.twinPeaks().character();
         imageName = faker.twinPeaks().character();
 
-        requestBase64AuthSpec = requestAuthCommonSpec.multiPart(createMultiPartSpec(FILE_PATH))
-                .formParam("title",imageTitle)
-                .formParam("name",imageName);
-
-        requestBase64OverSizeAuthSpec = requestAuthCommonSpec.multiPart(createMultiPartSpec(BIG_FILE_PATH))
-                .formParam("title",imageTitle)
-                .formParam("name",imageName);
-
-
-        requestMinImageAuthSpec = createUploadImageSpec(token,MIN_FILE_PATH,imageName,imageTitle);
-        requestMaxImageAuthSpec = createUploadImageSpec(token,MAX_FILE_PATH,imageName,imageTitle);
-        requestUrlAuthSpec = createUploadUrlSpec(token,FILE_URL,imageName,imageTitle);
-        requestUrlOverSizeAuthSpec = createUploadUrlSpec(token,BIG_FILE_URL,imageName,imageTitle);
-        requestImageUnauthSpec = createUploadImageSpec(clientId,FILE_PATH,imageName,imageTitle);
-        requestImageOverSizeAuthSpec = createUploadImageSpec(token,BIG_FILE_PATH,imageName,imageTitle);
-        requestImageWrongFormatAuthSpec = createUploadImageSpec(token,WRONG_FILE_PATH,imageName,imageTitle);
-
-
+        requestBase64AuthSpec = CreateSpecUtils.createUploadImageBase64Spec(FILE_PATH,token,imageName,imageTitle);
+        requestBase64OverSizeAuthSpec = CreateSpecUtils.createUploadImageBase64Spec(BIG_FILE_PATH,token,imageName,imageTitle);
+        requestMinImageAuthSpec = createUploadImageSpec(token,new File(MIN_FILE_PATH),imageName,imageTitle);
+        requestMaxImageAuthSpec = createUploadImageSpec(token,new File(MAX_FILE_PATH),imageName,imageTitle);
+        requestUrlAuthSpec = createUploadImageSpec(token,FILE_URL,imageName,imageTitle);
+        requestUrlOverSizeAuthSpec = createUploadImageSpec(token,BIG_FILE_URL,imageName,imageTitle);
+        requestImageUnauthSpec = createUploadImageSpec(clientId,new File(FILE_PATH),imageName,imageTitle);
+        requestImageOverSizeAuthSpec = createUploadImageSpec(token,new File(BIG_FILE_PATH),imageName,imageTitle);
+        requestImageWrongFormatAuthSpec = createUploadImageSpec(token,new File(WRONG_FILE_PATH),imageName,imageTitle);
     }
 
     @Step("Тест")
@@ -273,4 +270,6 @@ public class UploadImageTests extends BaseTest {
                     .spec(responseCommonPositiveSpec);
         }
     }
+
+
 }

@@ -12,23 +12,31 @@ import java.io.File;
 
 @UtilityClass
 public class CreateSpecUtils {
-    public MultiPartSpecification createMultiPartSpec (String file) {
-        return new MultiPartSpecBuilder(FileEncodingUtils.getFileContent(file))
+    public RequestSpecification createUploadImageBase64Spec(String file, String auth, String name, String title) {
+        MultiPartSpecification spec =  new MultiPartSpecBuilder(FileEncodingUtils.getFileContent(file))
                 .controlName("image")
                 .build();
+        return  new RequestSpecBuilder()
+                .log(LogDetail.ALL)
+                .addFilter(new AllureRestAssured())
+                .addHeader("Authorization",auth)
+                .addMultiPart(spec)
+                .addFormParam("title",title)
+                .addFormParam("name",name)
+                .build();
     }
-    public RequestSpecification createUploadImageSpec (String auth, String file, String name, String title) {
+    public RequestSpecification createUploadImageSpec (String auth, File file, String name, String title) {
         return new RequestSpecBuilder()
                 .log(LogDetail.ALL)
                 .addFilter(new AllureRestAssured())
                 .addHeader("Authorization",auth)
-                .addMultiPart("image",new File(file))
+                .addMultiPart("image",file)
                 .addMultiPart("title",title)
                 .addMultiPart("name",name)
                 .build();
 
     }
-    public RequestSpecification createUploadUrlSpec (String auth,String url, String name, String title) {
+    public RequestSpecification createUploadImageSpec(String auth, String url, String name, String title) {
         return new RequestSpecBuilder()
                 .log(LogDetail.ALL)
                 .addFilter(new AllureRestAssured())
