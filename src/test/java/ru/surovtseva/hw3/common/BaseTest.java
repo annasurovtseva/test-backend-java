@@ -37,14 +37,26 @@ public abstract class BaseTest {
     @BeforeAll
     static void beforeAll() {
         loadProperties();
-        clientId = properties.getProperty("client.id");
-        username = properties.getProperty("username");
-        token = properties.getProperty("token");
+
         headersAuth.put("Authorization",token);
         headersUnAuth.put("Authorization",clientId);
         RestAssured.baseURI = properties.getProperty("base.url");
 
         RestAssured.filters(new AllureRestAssured());
+
+        accountID = getAccountId();
+    }
+
+    static void loadProperties() {
+        try {
+            properties.load(new FileInputStream("src/test/resources/config.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        clientId = properties.getProperty("client.id");
+        username = properties.getProperty("username");
+        token = properties.getProperty("token");
 
         FILE_URL = properties.getProperty("file.url");
         FILE_NAME = properties.getProperty("file.name");
@@ -59,8 +71,10 @@ public abstract class BaseTest {
         ERROR_SIZE = properties.getProperty("error.size");
         ERROR_TYPE = properties.getProperty("error.type");
         FILE_FOR_GET_URL = properties.getProperty("file.for.get.url");
+    }
 
-        accountID= given()
+    static int getAccountId(){
+        return given()
                 .log()
                 .method()
                 .headers(headersAuth)
@@ -73,13 +87,5 @@ public abstract class BaseTest {
                 .response()
                 .jsonPath()
                 .getInt("data.id");
-    }
-
-    static void loadProperties() {
-        try {
-            properties.load(new FileInputStream("src/test/resources/config.properties"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+     }
 }
