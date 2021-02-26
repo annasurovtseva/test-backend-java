@@ -1,6 +1,5 @@
 # Автоматизация тестирования backend на Java
-## Rest-assured
+## Retrofit/OkHttp3
 
-![alt tag](https://i.imgur.com/W8BUzJ7.png "")
 
-![alt tag](https://i.imgur.com/kHmiGdt.png "")
+# НЕ ГОТОВО!!!!!
