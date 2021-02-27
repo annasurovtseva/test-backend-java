@@ -12,13 +12,13 @@ import lombok.With;
 @With
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product <I, T, P> {
+public class Product  {
     @JsonProperty("id")
-    private I id;
+    private Integer id;
     @JsonProperty("title")
-    private T title;
+    private String title;
     @JsonProperty("price")
-    private P price;
+    private Object price;
     @JsonProperty("categoryTitle")
     private String categoryTitle;
 }

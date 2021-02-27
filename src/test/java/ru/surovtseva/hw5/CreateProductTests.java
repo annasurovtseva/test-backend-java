@@ -27,9 +27,8 @@ public class CreateProductTests {
     Faker faker = new Faker();
     Integer productID;
     Integer productPrice;
-    Double priceOverInt = 2147483648.0;
-
-
+    String productTitle;
+    long priceOverInt;
 
     @BeforeAll
     static void beforeAll() {
@@ -41,6 +40,9 @@ public class CreateProductTests {
     @BeforeEach
     void setUp() {
         productPrice = (int)(Math.random() * 1000 + 1);
+        productTitle = faker.witcher().monster();
+        priceOverInt = Integer.MAX_VALUE+ Math.round(Math.random() * 10 + 1);
+
         product = new Product()
                 .withCategoryTitle(CategoryType.ELECTRONIC.getTitle());
     }
@@ -50,9 +52,7 @@ public class CreateProductTests {
     @DisplayName("(+) Создание продукта: все поля заполнены корректно.")
     @Test
     void createNewProductPositiveTest(){
-        String productTitle = faker.witcher().monster();
-
-        Response<Product<Integer,String,Integer>> response = productService
+        Response<Product> response = productService
                 .createProduct(product
                 .withTitle(productTitle)
                 .withPrice(productPrice)).execute();
@@ -69,7 +69,7 @@ public class CreateProductTests {
     @DisplayName("(+) Создание продукта: заполнены не все поля")
     @Test
     void createNewProductNotAllFieldsPositiveTest(){
-        Response<Product<Integer,String,Integer>> response = productService
+        Response<Product> response = productService
                 .createProduct(product).execute();
 
         productID = response.body().getId();
@@ -79,67 +79,50 @@ public class CreateProductTests {
         assertThat(response.body().getPrice()).isEqualTo(0);
     }
 
-    @Step("Тест: Создание продукта:  значение Double в поле Price")
+    @Step("Тест: Создание продукта: значение Double в поле Price")
     @SneakyThrows
     @DisplayName("(+) Создание продукта: в поле Цена передается значение Double")
     @Test
     void createNewProductDoublePricePositiveTest(){
-        Double productPrice = (Math.random() * 1000 + 1);
-        Response<Product<Integer,String,Double>> response = productService
-                .createProductDoublePrice(product
+        double productPrice = (Math.random() * 1000 + 1);
+
+        Response<Product> response = productService
+                .createProduct(product
                         .withPrice(productPrice)).execute();
 
         productID = response.body().getId();
         assertThat(response.code()).isEqualTo(201);
         assertThat(response.body().getCategoryTitle()).isEqualTo(CategoryType.ELECTRONIC.getTitle());
         assertThat(response.body().getTitle()).isNull();
-        assertThat(response.body().getPrice()).isEqualTo(Math.floor(productPrice));
+        assertThat(response.body().getPrice()).isEqualTo((int)(Math.floor(productPrice)));
     }
 
-    @Step("Тест: Создание продукта:  в поле Цена передается строка с цифрами")
+    @Step("Тест: Создание продукта: в поле Цена передается строка с цифрами")
     @SneakyThrows
     @DisplayName("(+) Создание продукта: в поле Цена передается строка с цифрами")
     @Test
     void createNewProductStringNumPricePositiveTest(){
         String productPriceString = String.valueOf(productPrice);
 
-        Response<Product<Integer,String,String>> response = productService
-                .createProductStringPrice(product
+        Response<Product> response = productService
+                .createProduct(product
                         .withPrice(productPriceString)).execute();
 
         productID = response.body().getId();
         assertThat(response.code()).isEqualTo(201);
         assertThat(response.body().getCategoryTitle()).isEqualTo(CategoryType.ELECTRONIC.getTitle());
         assertThat(response.body().getTitle()).isNull();
-        assertThat(response.body().getPrice()).isEqualTo(productPriceString);
+        assertThat(response.body().getPrice()).isEqualTo(Integer.parseInt(productPriceString));
     }
 
-    @Step("Тест: Создание продукта:  в поле Title передается Int")
-    @SneakyThrows
-    @DisplayName("(+) Создание продукта: в поле Наименование передаются данные типа Int")
-    @Test
-    void createNewProductIntTitlePositiveTest(){
-        int productTitle = productPrice;
-
-        Response<Product<Integer,Integer,Integer>> response = productService
-                .createProductIntTitle(product
-                        .withTitle(productTitle)).execute();
-
-        productID = response.body().getId();
-        assertThat(response.code()).isEqualTo(201);
-        assertThat(response.body().getCategoryTitle()).isEqualTo(CategoryType.ELECTRONIC.getTitle());
-        assertThat(response.body().getTitle()).isEqualTo(productTitle);
-        assertThat(response.body().getPrice()).isEqualTo(0);
-    }
-
-    @Step("Тест: Создание продукта:  значение больше Int в поле Price")
+    @Step("Тест: Создание продукта: значение больше Int в поле Price")
     @SneakyThrows
     @DisplayName("(-) Создание продукта: в поле Цена передается значение больше Int")
     @Test
     void createNewProductPriceOverIntNegativeTest(){
 
-        Response<Product<Integer,String,Double>> response = productService
-                .createProductDoublePrice(product
+        Response<Product> response = productService
+                .createProduct(product
                         .withPrice(priceOverInt)).execute();
 
         assertThat(response.code()).isEqualTo(400);
@@ -152,21 +135,19 @@ public class CreateProductTests {
     void createNewProductStringCharPriceNegativeTest(){
         String productPrice = GenerateDataUtils.generateString(4);
 
-        Response<Product<Integer,String,String>> response = productService
-                .createProductStringPrice(product
+        Response<Product> response = productService
+                .createProduct(product
                         .withPrice(productPrice)).execute();
-
 
         assertThat(response.code()).isEqualTo(400);
     }
 
-
-    @Step("Тест: Создание продукта:  заполнено поле ID")
+    @Step("Тест: Создание продукта: заполнено поле ID")
     @SneakyThrows
     @DisplayName("(-) Создание продукта: заполнено поле ID")
     @Test
     void createNewProductWithIdNegativeTest(){
-        Response<Product<Integer,String,Integer>> response = productService
+        Response<Product> response = productService
                 .createProduct(product
                         .withId((int)(Math.random() * 5000 + 5000))).execute();
 
@@ -187,11 +168,11 @@ public class CreateProductTests {
     @DisplayName("(-) Создание продукта: в поле Наименоване передается строка больше 255 символов")
     @Test
     void createNewProductTooLongStringToTitleNegativeTest(){
-        Response<Product<Integer,String,Integer>> response = productService
+        Response<Product> response = productService
                 .createProduct(product
                         .withTitle(GenerateDataUtils.generateString(256))).execute();
 
-        assertThat(response.code()).as("Expect code 400 when pass string over 255 to Title").isEqualTo(400);
+        assertThat(response.code()).as("Ожидается 400 Bad Bad Request").isEqualTo(400);
     }
 
     @Step("Тест: Создание продукта: пустое значение в поле Category")
@@ -199,10 +180,11 @@ public class CreateProductTests {
     @DisplayName("(-) Создание продукта:в поле Категоря передается пустое значение")
     @Test
     void createNewProductEmptyCategoryNegativeTest(){
-        Response<Product<Integer,String,Integer>> response = productService
-                .createProduct(new Product()).execute();
+        Response<Product> response = productService
+                .createProduct(new Product()
+                .withTitle(productTitle)).execute();
 
-        assertThat(response.code()).as("Expect code 400 when pass empty field to Category").isEqualTo(400);
+        assertThat(response.code()).as("Ожидается 400 Bad Bad Request. Category don't be null").isEqualTo(400);
     }
 
     @Step("Тест: Создание продукта: отрицательное значение в поле Price")
@@ -210,13 +192,13 @@ public class CreateProductTests {
     @DisplayName("(-) Создание продукта:в поле Цена передается отрицательное значение")
     @Test
     void createNewProductNegativeValueToPriceNegativeTest(){
-        Response<Product<Integer,String,Integer>> response = productService
+        Response<Product> response = productService
                 .createProduct(product
                         .withPrice(productPrice * -1)).execute();
 
         productID = response.body().getId();
 
-        assertThat(response.code()).as("Expect code 400 when pass negative value to Price").isEqualTo(400);
+        assertThat(response.code()).as("Ожидается 400 Bad Bad Request. Price don't be negative").isEqualTo(400);
     }
 
     @Step("Удаление продукта после теста")
