@@ -67,7 +67,7 @@ public class DeleteProductTests {
     @DisplayName("Удаление продукта по невалидному ID")
     @Test
     void deleteProductFakeIDNegativeTest() {
-//        int fakeID = GenerateDataUtils.generateFakeID();
+
         Response<ResponseBody> response =
                 productService.deleteProduct(fakeID).execute();
 

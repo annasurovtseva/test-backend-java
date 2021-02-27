@@ -17,6 +17,7 @@ import ru.surovtseva.hw5.utils.RetrofitUtils;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -97,7 +98,7 @@ public class CreateProductTests {
         assertThat(response.body().getPrice()).isEqualTo((int)(Math.floor(productPrice)));
     }
 
-    @Step("Тест: Создание продукта: в поле Цена передается строка с цифрами")
+    @Step("Тест: Создание продукта: в Price передается строка с цифрами")
     @SneakyThrows
     @DisplayName("(+) Создание продукта: в поле Цена передается строка с цифрами")
     @Test
@@ -115,7 +116,7 @@ public class CreateProductTests {
         assertThat(response.body().getPrice()).isEqualTo(Integer.parseInt(productPriceString));
     }
 
-    @Step("Тест: Создание продукта: значение больше Int в поле Price")
+    @Step("Тест: Создание продукта: в Price передается значение больше Int ")
     @SneakyThrows
     @DisplayName("(-) Создание продукта: в поле Цена передается значение больше Int")
     @Test
@@ -128,7 +129,7 @@ public class CreateProductTests {
         assertThat(response.code()).isEqualTo(400);
     }
 
-    @Step("Тест: Создание продукта: в поле Цена передается строка с буквами")
+    @Step("Тест: Создание продукта: в Price передается строка с буквами")
     @SneakyThrows
     @DisplayName("(-) Создание продукта: в поле Цена передается строка с буквами")
     @Test
@@ -172,19 +173,22 @@ public class CreateProductTests {
                 .createProduct(product
                         .withTitle(GenerateDataUtils.generateString(256))).execute();
 
-        assertThat(response.code()).as("Ожидается 400 Bad Bad Request").isEqualTo(400);
+        assertThat(response.code()).as("Expect 400 Bad Bad Request").isEqualTo(400);
     }
 
-    @Step("Тест: Создание продукта: пустое значение в поле Category")
+    @Step("Тест: Создание продукта: пустое значение в поле сategoryTitle")
     @SneakyThrows
-    @DisplayName("(-) Создание продукта:в поле Категоря передается пустое значение")
+    @DisplayName("(-) Создание продукта:в поле Наименование Категори передается пустое значение")
     @Test
     void createNewProductEmptyCategoryNegativeTest(){
         Response<Product> response = productService
                 .createProduct(new Product()
                 .withTitle(productTitle)).execute();
 
-        assertThat(response.code()).as("Ожидается 400 Bad Bad Request. Category don't be null").isEqualTo(400);
+        Consumer<Integer> code400 = code -> assertThat(response.code()).isEqualTo(400);
+        Consumer<Integer> code201 = code -> assertThat(response.code()).isEqualTo(201);
+
+        assertThat(response.code()).as("If Category is required then expect code 400, else expect 201").satisfiesAnyOf(code400,code201);
     }
 
     @Step("Тест: Создание продукта: отрицательное значение в поле Price")
@@ -198,7 +202,7 @@ public class CreateProductTests {
 
         productID = response.body().getId();
 
-        assertThat(response.code()).as("Ожидается 400 Bad Bad Request. Price don't be negative").isEqualTo(400);
+        assertThat(response.code()).as("Expect 400 Bad Bad Request. Price don't be negative").isEqualTo(400);
     }
 
     @Step("Удаление продукта после теста")
