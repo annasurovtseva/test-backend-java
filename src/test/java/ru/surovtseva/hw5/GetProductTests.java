@@ -58,7 +58,7 @@ public class GetProductTests {
     @SneakyThrows
     @DisplayName("(+) Получение продукта по ID")
     @Test
-    void GetProductPositiveTest() {
+    void getProductPositiveTest() {
         Response<Product> response = productService
                 .getProduct(productID).execute();
 
@@ -72,7 +72,7 @@ public class GetProductTests {
     @SneakyThrows
     @DisplayName("(+) Получение всех продуктов")
     @Test
-    void GetAllProductsPositiveTest() {
+    void getAllProductsPositiveTest() {
         Response<ResponseBody> response = productService.getAllProducts().execute();
 
         assertThat(response.code()).isEqualTo(200);
@@ -82,7 +82,7 @@ public class GetProductTests {
     @SneakyThrows
     @DisplayName("(-) Получение продукта по  несуществующему ID")
     @Test
-    void GetProductNegativeTest() {
+    void getProductNegativeTest() {
         Response<Product> response = productService
                 .getProduct(fakeID).execute();
 

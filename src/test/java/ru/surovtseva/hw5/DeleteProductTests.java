@@ -58,7 +58,10 @@ public class DeleteProductTests {
         Response<ResponseBody> response =
                 productService.deleteProduct(productID).execute();
 
-        assertThat(response.code()).isEqualTo(200);
+        Consumer<Integer> code200 = code -> assertThat(response.code()).isEqualTo(200);
+        Consumer<Integer> code204 = code -> assertThat(response.code()).isEqualTo(204);
+
+        assertThat(response.code()).satisfiesAnyOf(code200,code204);
     }
 
     //Fail Test
