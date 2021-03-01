@@ -191,6 +191,19 @@ public class CreateProductTests {
         assertThat(response.code()).as("If Category is required then expect code 400, else expect 201").satisfiesAnyOf(code400,code201);
     }
 
+    @Step("Тест: Создание продукта: невалидное значение в поле сategoryTitle")
+    @SneakyThrows
+    @DisplayName("(-) Создание продукта:в поле Наименование Категори передается невалидное значение")
+    @Test
+    void createNewProductFakeCategoryNegativeTest(){
+        Response<Product> response = productService
+                .createProduct(new Product()
+                        .withTitle(productTitle)
+                        .withCategoryTitle(faker.music().instrument())).execute();
+
+        assertThat(response.code()).as("Expect 400 Bad Bad Request").isEqualTo(400);
+    }
+
     @Step("Тест: Создание продукта: отрицательное значение в поле Price")
     @SneakyThrows
     @DisplayName("(-) Создание продукта:в поле Цена передается отрицательное значение")
