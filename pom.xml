@@ -12,12 +12,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
         <maven.surefire.plugin.versio>3.0.0-M5</maven.surefire.plugin.versio>
-<!--        <io.rest-assured.version>4.3.3</io.rest-assured.version>-->
         <junit5.version>5.7.0</junit5.version>
-<!--        <commons-io.version>2.6</commons-io.version>-->
         <allure-maven.version>2.10.0</allure-maven.version>
         <aspectjweaver.version>1.9.5</aspectjweaver.version>
-<!--        <allure-rest-assured.version>2.13.8</allure-rest-assured.version>-->
         <allure-junit5.version>2.13.6</allure-junit5.version>
         <jackson.version>2.11.1</jackson.version>
         <lombok.vesion>1.18.16</lombok.vesion>
@@ -71,29 +68,12 @@
         </plugins>
     </build>
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
-<!--        <dependency>-->
-<!--            <groupId>io.rest-assured</groupId>-->
-<!--            <artifactId>rest-assured</artifactId>-->
-<!--            <version>${io.rest-assured.version}</version>-->
-<!--&lt;!&ndash;            <scope>test</scope>&ndash;&gt;-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>io.qameta.allure</groupId>-->
-<!--            <artifactId>allure-rest-assured</artifactId>-->
-<!--            <version>${allure-rest-assured.version}</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>${junit5.version}</version>
             <scope>test</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>commons-io</groupId>-->
-<!--            <artifactId>commons-io</artifactId>-->
-<!--            <version>${commons-io.version}</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>com.squareup.retrofit2</groupId>
             <artifactId>retrofit</artifactId>

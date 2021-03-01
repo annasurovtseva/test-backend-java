@@ -1,5 +1,4 @@
 # Автоматизация тестирования backend на Java
 ## Retrofit/OkHttp3
 
-
-# НЕ ГОТОВО!!!!!
+![alt text](src/test/resources/Product.png)
