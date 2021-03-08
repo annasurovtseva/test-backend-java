@@ -1,4 +1,5 @@
 # Автоматизация тестирования backend на Java
 ## Retrofit/OkHttp3
+## ORM MyBatis
 
-![alt text](src/test/resources/Product.png)
+#НЕ ГОТОВО!!!
