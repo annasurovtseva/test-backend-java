@@ -107,6 +107,9 @@ public class GetProductTests {
             ErrorBody errorBody = converter.convert(body);
             assertThat(errorBody.getMessage()).contains("Unable to find product");
         }
+
+        //Проверка: запись в базе отсутствует
+        assertThat(productsMapper.selectByPrimaryKey((long)fakeID)).isNull();
     }
 
     @Step("Удаление продукта после теста")
