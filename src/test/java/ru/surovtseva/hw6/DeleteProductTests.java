@@ -3,6 +3,7 @@ package ru.surovtseva.hw6;
 import com.github.javafaker.Faker;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
+import io.qameta.allure.Story;
 import lombok.SneakyThrows;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.*;
@@ -52,6 +53,7 @@ public class DeleteProductTests {
         fakeID = (int)(Math.random() * 10000 + 10000);
     }
 
+    @Story("Позитивные")
     @Step("Тест: удаление продукта")
     @SneakyThrows
     @DisplayName("Удаление продукта")
@@ -70,6 +72,7 @@ public class DeleteProductTests {
     }
 
     //Fail Test
+    @Story("Дефекты")
     @Step("Тест: удаление продукта по невалидному ID")
     @SneakyThrows
     @DisplayName("Удаление продукта по невалидному ID")

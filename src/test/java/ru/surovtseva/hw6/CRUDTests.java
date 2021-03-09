@@ -74,7 +74,7 @@ public class CRUDTests {
         assertThat(productsMapper.selectByPrimaryKey((long)productID).getCategory_id()).isEqualTo((long)(CategoryType.FOOD.getId()));
     }
 
-    @Feature("Интеграционный тест: Изменение - Получение - Удаление - Получение")
+    @Feature("Интеграционный тест: Изменение - Получение - Удаление")
     @Nested
     class whenProductModified {
         @SneakyThrows

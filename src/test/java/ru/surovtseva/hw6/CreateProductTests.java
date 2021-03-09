@@ -3,6 +3,7 @@ package ru.surovtseva.hw6;
 import com.github.javafaker.Faker;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
+import io.qameta.allure.Story;
 import lombok.SneakyThrows;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.*;
@@ -52,6 +53,7 @@ public class CreateProductTests {
                 .withCategoryTitle(CategoryType.ELECTRONIC.getTitle());
     }
 
+    @Story("Позитивные")
     @Step("Тест: Создание продукта: все поля заполнены корректно")
     @SneakyThrows
     @DisplayName("(+) Создание продукта: все поля заполнены корректно.")
@@ -76,6 +78,7 @@ public class CreateProductTests {
         assertThat(productsMapper.selectByPrimaryKey((long)productID).getCategory_id()).isEqualTo((long)(CategoryType.ELECTRONIC.getId()));
     }
 
+    @Story("Позитивные")
     @Step("Тест: Создание продукта: заполнены не все поля")
     @SneakyThrows
     @DisplayName("(+) Создание продукта: заполнены не все поля")
@@ -98,6 +101,7 @@ public class CreateProductTests {
         assertThat(productsMapper.selectByPrimaryKey((long)productID).getCategory_id()).isEqualTo((long)(CategoryType.ELECTRONIC.getId()));
     }
 
+    @Story("Позитивные")
     @Step("Тест: Создание продукта: значение Double в поле Price")
     @SneakyThrows
     @DisplayName("(+) Создание продукта: в поле Цена передается значение Double")
@@ -124,6 +128,7 @@ public class CreateProductTests {
 
     }
 
+    @Story("Позитивные")
     @Step("Тест: Создание продукта: в Price передается строка с цифрами")
     @SneakyThrows
     @DisplayName("(+) Создание продукта: в поле Цена передается строка с цифрами")
@@ -149,6 +154,7 @@ public class CreateProductTests {
         assertThat(productsMapper.selectByPrimaryKey((long)productID).getCategory_id()).isEqualTo((long)(CategoryType.ELECTRONIC.getId()));
     }
 
+    @Story("Негативные")
     @Step("Тест: Создание продукта: в Price передается значение больше Int ")
     @SneakyThrows
     @DisplayName("(-) Создание продукта: в поле Цена передается значение больше Int")
@@ -162,6 +168,7 @@ public class CreateProductTests {
         assertThat(response.code()).isEqualTo(400);
     }
 
+    @Story("Негативные")
     @Step("Тест: Создание продукта: в Price передается строка с буквами")
     @SneakyThrows
     @DisplayName("(-) Создание продукта: в поле Цена передается строка с буквами")
@@ -176,6 +183,7 @@ public class CreateProductTests {
         assertThat(response.code()).isEqualTo(400);
     }
 
+    @Story("Негативные")
     @Step("Тест: Создание продукта: заполнено поле ID")
     @SneakyThrows
     @DisplayName("(-) Создание продукта: заполнено поле ID")
@@ -202,6 +210,7 @@ public class CreateProductTests {
 
     //Fail Tests
 
+    @Story("Дефекты")
     @Step("Тест: Создание продукта: строка больше 255 в поле Title")
     @SneakyThrows
     @DisplayName("(-) Создание продукта: в поле Наименоване передается строка больше 255 символов")
@@ -214,6 +223,7 @@ public class CreateProductTests {
         assertThat(response.code()).as("Expect 400 Bad Bad Request").isEqualTo(400);
     }
 
+    @Story("Дефекты")
     @Step("Тест: Создание продукта: пустое значение в поле сategoryTitle")
     @SneakyThrows
     @DisplayName("(-) Создание продукта:в поле Наименование Категори передается пустое значение")
@@ -229,6 +239,7 @@ public class CreateProductTests {
         assertThat(response.code()).as("If Category is required then expect code 400, else expect 201").satisfiesAnyOf(code400,code201);
     }
 
+    @Story("Дефекты")
     @Step("Тест: Создание продукта: невалидное значение в поле сategoryTitle")
     @SneakyThrows
     @DisplayName("(-) Создание продукта:в поле Наименование Категори передается невалидное значение")
@@ -242,6 +253,7 @@ public class CreateProductTests {
         assertThat(response.code()).as("Expect 400 Bad Bad Request").isEqualTo(400);
     }
 
+    @Story("Дефекты")
     @Step("Тест: Создание продукта: отрицательное значение в поле Price")
     @SneakyThrows
     @DisplayName("(-) Создание продукта:в поле Цена передается отрицательное значение")

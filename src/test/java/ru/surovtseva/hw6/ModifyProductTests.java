@@ -3,6 +3,7 @@ package ru.surovtseva.hw6;
 import com.github.javafaker.Faker;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
+import io.qameta.allure.Story;
 import lombok.SneakyThrows;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.*;
@@ -58,6 +59,7 @@ public class ModifyProductTests {
         productID = response.body().getId();
      }
 
+    @Story("Позитивные")
     @Step("Тест: Изменение продукта по валидному ID: все поля")
     @SneakyThrows
     @DisplayName("(+) Изменение продукта по валидному ID: все поля")
@@ -83,6 +85,7 @@ public class ModifyProductTests {
         assertThat(productsMapper.selectByPrimaryKey((long)productID).getCategory_id()).isEqualTo((long)(CategoryType.FOOD.getId()));
     }
 
+    @Story("Позитивные")
     @Step("Тест: Изменение продукта по валидному ID: не все поля")
     @SneakyThrows
     @DisplayName("(+) Изменение продукта по валидному ID: заполнены не все поля")
@@ -105,6 +108,7 @@ public class ModifyProductTests {
         assertThat(productsMapper.selectByPrimaryKey((long)productID).getCategory_id()).isEqualTo((long)(CategoryType.FOOD.getId()));
     }
 
+    @Story("Негативные")
     @Step("Тест: Изменение продукта по пустому ID")
     @SneakyThrows
     @DisplayName("(-) Изменение продукта: передан пустой ID")
@@ -134,6 +138,7 @@ public class ModifyProductTests {
     }
 
     //Fail Test
+    @Story("Дефекты")
     @Step("Тест: Изменение продукта по невалидному ID")
     @SneakyThrows
     @DisplayName("(-) Изменение продукт по невалидному ID")

@@ -12,7 +12,7 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CategoryTests {
+public class Category {
     static CategoryService categoryService;
 
     @BeforeAll
@@ -22,7 +22,7 @@ public class CategoryTests {
 
     @Test
     void getCategoryPositiveTest() throws IOException {
-        Response<Category> response = categoryService
+        Response<ru.surovtseva.hw6.dto.positive.Category> response = categoryService
                 .getCategory(CategoryType.FOOD.getId())
                 .execute();
 

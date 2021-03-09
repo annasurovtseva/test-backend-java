@@ -3,6 +3,7 @@ package ru.surovtseva.hw6;
 import com.github.javafaker.Faker;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
+import io.qameta.allure.Story;
 import lombok.SneakyThrows;
 import okhttp3.ResponseBody;
 import org.junit.jupiter.api.*;
@@ -59,6 +60,7 @@ public class GetProductTests {
         productID = response.body().getId();
     }
 
+    @Story("Позитивные")
     @Step("Тест: Получение продукта по ID")
     @SneakyThrows
     @DisplayName("(+) Получение продукта по ID")
@@ -79,6 +81,7 @@ public class GetProductTests {
         assertThat(productsMapper.selectByPrimaryKey((long)productID).getCategory_id()).isEqualTo((long)(CategoryType.ELECTRONIC.getId()));
     }
 
+    @Story("Позитивные")
     @Step("Тест: Получение всех продуктов")
     @SneakyThrows
     @DisplayName("(+) Получение всех продуктов")
@@ -89,6 +92,7 @@ public class GetProductTests {
         assertThat(response.code()).isEqualTo(200);
     }
 
+    @Story("Негативные")
     @Step("Тест: Получение продукта по невалидному ID")
     @SneakyThrows
     @DisplayName("(-) Получение продукта по  несуществующему ID")
