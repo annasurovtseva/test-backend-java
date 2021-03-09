@@ -77,7 +77,6 @@ public class GetProductTests {
         assertThat(productsMapper.selectByPrimaryKey((long)productID).getPrice()).isEqualTo(productPrice);
         assertThat(productsMapper.selectByPrimaryKey((long)productID).getTitle()).isEqualTo(productTitle);
         assertThat(productsMapper.selectByPrimaryKey((long)productID).getCategory_id()).isEqualTo((long)(CategoryType.ELECTRONIC.getId()));
-
     }
 
     @Step("Тест: Получение всех продуктов")

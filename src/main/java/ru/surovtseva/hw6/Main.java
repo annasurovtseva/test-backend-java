@@ -21,13 +21,15 @@ public class Main {
 
         Products product = new Products()
                 .withId(3462L)
-                .withTitle("my updated")
+                .withTitle("myNewProduct")
                 .withPrice(777)
                 .withCategory_id(1L);
 
         ProductsExample productsExample = new ProductsExample();
         productsExample.createCriteria().andIdEqualTo(3462L);
         productsMapper.updateByExample(product, productsExample);
+
+
 
     }
 }

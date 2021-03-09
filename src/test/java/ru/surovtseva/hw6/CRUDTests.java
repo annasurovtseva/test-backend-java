@@ -8,10 +8,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import retrofit2.Converter;
 import retrofit2.Response;
 import ru.surovtseva.hw6.db.dao.ProductsMapper;
-import ru.surovtseva.hw6.dto.negative.ErrorBody;
 import ru.surovtseva.hw6.dto.positive.Product;
 import ru.surovtseva.hw6.enums.CategoryType;
 import ru.surovtseva.hw6.services.ProductService;
@@ -19,12 +17,11 @@ import ru.surovtseva.hw6.utils.DbUtils;
 import ru.surovtseva.hw6.utils.RetrofitUtils;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Feature("Интеграционный тест: Изменение - Получение - Удаление - Получение")
+@Feature("Интеграционный тест: Изменение - Получение - Удаление")
 public class CRUDTests {
     static ProductService productService;
     static ProductsMapper productsMapper;
@@ -42,8 +39,8 @@ public class CRUDTests {
                 .create(ProductService.class);
 
         product = new Product()
-                .withTitle(faker.cat().name())
-                .withPrice(faker.number().randomNumber())
+                .withTitle(faker.commerce().productName())
+                .withPrice((int)(Math.random()*1000+1))
                 .withCategoryTitle(CategoryType.ELECTRONIC.getTitle());
 
         Response<Product> response = productService
@@ -99,7 +96,7 @@ public class CRUDTests {
             assertThat(productsMapper.selectByPrimaryKey((long)productID).getCategory_id()).isEqualTo((long)(CategoryType.FOOD.getId()));
         }
 
-        @Feature("Интеграционный тест: Изменение - Получение - Удаление - Получение")
+        @Feature("Интеграционный тест: Изменение - Получение - Удаление")
         @Nested
         class whenProductWasGot {
             @SneakyThrows
@@ -114,29 +111,8 @@ public class CRUDTests {
                 Consumer<Integer> code204 = code -> assertThat(response.code()).isEqualTo(204);
                 assertThat(response.code()).satisfiesAnyOf(code200,code204);
 
-//                //Проверка: запись в базе отсутствует
-//                assertThat(productsMapper.selectByPrimaryKey((long)productID)).isNull();
-            }
-
-            @Feature("Интеграционный тест: Изменение - Получение - Удаление - Получение")
-            @Nested
-            class whenProductDeleted{
-                @SneakyThrows
-                @DisplayName("Получение продукта после удаление")
-                @Test
-                void getDeletedProduct() {
-                    Response<Product> response = productService
-                            .getProduct(productID).execute();
-
-                    assertThat(response.code()).isEqualTo(404);
-                    if (response != null && !response.isSuccessful() && response.errorBody() != null) {
-                        ResponseBody body = response.errorBody();
-                        Converter<ResponseBody, ErrorBody> converter = RetrofitUtils.getRetrofit()
-                                .responseBodyConverter(ErrorBody.class, new Annotation[0]);
-                        ErrorBody errorBody = converter.convert(body);
-                        assertThat(errorBody.getMessage()).contains("Unable to find product");
-                    }
-                }
+                //Проверка: запись в базе отсутствует
+                assertThat(productsMapper.selectByPrimaryKey((long)productID)).isNull();
             }
         }
     }
